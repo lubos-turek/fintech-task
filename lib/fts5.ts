@@ -72,7 +72,6 @@ export async function searchCategoriesFull(searchTerm: string, limit: number = 1
     return []
   }
 
-  // @ts-expect-error - TypeScript language server cache issue. Types are correctly generated.
   return prisma.imageNetCategory.findMany({
     where: {
       id: {

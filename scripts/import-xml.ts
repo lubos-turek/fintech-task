@@ -126,7 +126,6 @@ async function insertIntoDatabase(categories: CategoryData[]) {
       const parentPath = lastSeparator === -1 ? null : cat.path.substring(0, lastSeparator)
       const parentId = parentPath ? pathToIdMap.get(parentPath) || null : null
 
-      // @ts-expect-error - TypeScript language server cache issue. Types are correctly generated.
       return prisma.imageNetCategory.create({
         data: {
           path: cat.path,
@@ -173,7 +172,6 @@ async function main() {
 
   // Clear existing data
   console.log('Clearing existing categories...')
-  // @ts-expect-error - TypeScript language server cache issue. Types are correctly generated.
   await prisma.imageNetCategory.deleteMany({})
 
   // Insert into database
