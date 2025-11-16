@@ -148,7 +148,3 @@ The Docker setup uses volumes to persist:
 - In Docker, the database is persisted in the `./data` directory
 - Make sure to run `db:generate` after modifying the Prisma schema
 - The production Dockerfile uses Next.js standalone output for optimal image size
-
-## License
-
-MIT
