@@ -44,6 +44,9 @@ Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwin
 
    # Initialize FTS5 for full-text search
    npm run db:init-fts5
+
+   # Import data from structure_released.xml
+   npm run import:xml
    ```
 
 4. **Start the development server:**
@@ -93,6 +96,8 @@ Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwin
 - `npm run db:generate` - Generate Prisma Client
 - `npm run db:push` - Push schema changes to database
 - `npm run db:studio` - Open Prisma Studio (database GUI)
+- `npm run db:init-fts5` - Initialize FTS5 virtual table for full-text search
+- `npm run import:xml` - Import ImageNet category data from `data/structure_released.xml`
 
 ## Database
 
@@ -109,6 +114,26 @@ The schema defines an `ImageNetCategory` model with hierarchical relationships (
 - **Generate Prisma Client:** `npm run db:generate`
 - **Push schema changes:** `npm run db:push`
 - **Open Prisma Studio:** `npm run db:studio`
+- **Initialize FTS5:** `npm run db:init-fts5`
+- **Import XML data:** `npm run import:xml`
+
+### Importing Data
+
+To import ImageNet category data from the XML file:
+
+1. Ensure `data/structure_released.xml` exists in your project
+2. Make sure the database schema is set up (`npm run db:push`)
+3. Run the import script:
+   ```bash
+   npm run import:xml
+   ```
+
+The script will:
+- Parse the XML file using streaming (memory-efficient for large files)
+- Transform nested synset structures into linear category paths
+- Calculate sizes (leaf node counts) for each category
+- Insert all categories into the database with proper parent-child relationships
+- Clear existing data before importing (if any)
 
 ## Docker Volumes
 
