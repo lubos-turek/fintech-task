@@ -1,6 +1,8 @@
 # ImageNet Categories Explorer
 
-Browse and search the ImageNet category hierarchy with an interactive tree view and debounced search. Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwind CSS.
+Browse and search the ImageNet category hierarchy with an interactive tree view and debounced search.
+
+Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwind CSS.
 
 ## Design Decisions
 
