@@ -1,16 +1,16 @@
-# Fintech Task
+# ImageNet Categories Explorer
 
-A modern web application built with Next.js 16, React 19, Prisma, SQLite, and Docker.
+Browse and search the ImageNet category hierarchy with an interactive tree view and debounced search. Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwind CSS.
 
-## Tech Stack
+## Design Decisions
 
-- **Next.js 16** - React framework with App Router
-- **React 19** - Latest React version
-- **TypeScript** - Type-safe JavaScript
-- **Prisma** - Modern ORM for database access
-- **SQLite** - Lightweight database
-- **Docker** - Containerization for easy deployment
-- **Tailwind CSS** - Utility-first CSS framework
+- **Streamed Data Ingestion**: Data is streamed into the database to prevent memory and CPU exhaustion with large datasets.
+
+- **SQLite Database**: SQLite provides simplicity, zero-configuration, and excellent read performance.
+
+- **Lazy-Loaded Categories**: Categories are loaded on-demand to improve initial page load and reduce memory usage.
+
+- **FTS5 Full-Text Search**: FTS5 enables fast path search at the cost of added database complexity.
 
 ## Prerequisites
 
@@ -93,26 +93,6 @@ A modern web application built with Next.js 16, React 19, Prisma, SQLite, and Do
 - `npm run db:migrate` - Run database migrations
 - `npm run db:studio` - Open Prisma Studio (database GUI)
 
-## Project Structure
-
-```
-fintech-task/
-├── app/                    # Next.js App Router pages
-│   ├── layout.tsx         # Root layout
-│   ├── page.tsx           # Home page
-│   └── globals.css        # Global styles
-├── lib/                   # Utility functions
-│   └── prisma.ts         # Prisma client instance
-├── prisma/                # Prisma configuration
-│   └── schema.prisma     # Database schema
-├── public/                # Static assets
-├── Dockerfile             # Production Docker image
-├── Dockerfile.dev         # Development Docker image
-├── docker-compose.yml     # Production Docker Compose
-├── docker-compose.dev.yml # Development Docker Compose
-└── package.json          # Dependencies and scripts
-```
-
 ## Database
 
 The project uses SQLite with Prisma. The database file is stored in:
@@ -121,7 +101,7 @@ The project uses SQLite with Prisma. The database file is stored in:
 
 ### Prisma Schema
 
-The default schema includes a `User` model. You can modify `prisma/schema.prisma` to add more models.
+The schema defines an `ImageNetCategory` model with hierarchical relationships (parent/children), storing category paths, sizes, and depth levels. FTS5 is configured for fast full-text search on category paths.
 
 ### Database Commands
 
