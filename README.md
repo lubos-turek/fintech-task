@@ -42,6 +42,9 @@ Browse and search the ImageNet category hierarchy with an interactive tree view 
 
    # Or run migrations
    npm run db:migrate
+
+   # Initialize FTS5 for full-text search
+   npm run db:init-fts5
    ```
 
 4. **Start the development server:**

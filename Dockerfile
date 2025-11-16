@@ -33,6 +33,11 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# Install tsx and ensure npm is available (before switching user)
+RUN npm install -g tsx
+# Ensure npm is in PATH (it should be, but making sure)
+ENV PATH="/usr/local/bin:${PATH}"
+
 # Create data directory for SQLite (before switching user)
 RUN mkdir -p /app/data && chown -R nextjs:nodejs /app/data
 
@@ -42,7 +47,15 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/scripts ./scripts
+COPY --from=builder /app/lib ./lib
+COPY --from=builder /app/package.json ./package.json
+
+# Copy entrypoint script
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
 
 USER nextjs
 
@@ -51,5 +64,6 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["node", "server.js"]
 
