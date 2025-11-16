@@ -31,7 +31,6 @@ A modern web application built with Next.js 16, React 19, Prisma, SQLite, and Do
    ```bash
    cp .env.example .env
    ```
-   The default `.env` file uses `DATABASE_URL="file:./dev.db"` for SQLite.
 
 3. **Set up the database:**
    ```bash
