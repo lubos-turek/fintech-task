@@ -16,7 +16,7 @@ A modern web application built with Next.js 16, React 19, Prisma, SQLite, and Do
 
 - Node.js 20+ (for local development)
 - Docker and Docker Compose (for containerized deployment)
-- npm or yarn
+- npm
 
 ## Getting Started
 
