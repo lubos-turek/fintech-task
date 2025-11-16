@@ -2,7 +2,6 @@ import * as fs from 'fs'
 import * as path from 'path'
 import * as sax from 'sax'
 import { prisma } from '../lib/prisma'
-import type { Prisma } from '@prisma/client'
 
 interface SynsetNode {
   words: string
@@ -11,7 +10,6 @@ interface SynsetNode {
   size?: number
   depth?: number
   path?: string
-  parentId?: number
 }
 
 async function parseXML(filePath: string): Promise<SynsetNode[]> {
@@ -109,7 +107,6 @@ function flattenTree(nodes: SynsetNode[], parentPath: string = '', depth: number
 
 async function insertIntoDatabase(categories: CategoryData[]) {
   const batchSize = 1000
-  const pathToIdMap: Map<string, number> = new Map()
 
   // Sort by depth to ensure parents are inserted before children
   const sortedCategories = [...categories].sort((a, b) => a.depth - b.depth)
@@ -124,24 +121,18 @@ async function insertIntoDatabase(categories: CategoryData[]) {
       // Find parent path by removing last " > " segment
       const lastSeparator = cat.path.lastIndexOf(' > ')
       const parentPath = lastSeparator === -1 ? null : cat.path.substring(0, lastSeparator)
-      const parentId = parentPath ? pathToIdMap.get(parentPath) || null : null
 
       return prisma.imageNetCategory.create({
         data: {
           path: cat.path,
           size: cat.size,
           depth: cat.depth,
-          parentId
+          parentPath
         }
       })
     })
 
-    const created = await Promise.all(createPromises)
-    
-    // Map paths to IDs for next batch
-    batch.forEach((cat, idx) => {
-      pathToIdMap.set(cat.path, created[idx].id)
-    })
+    await Promise.all(createPromises)
 
     if ((i + batchSize) % 5000 === 0 || i + batchSize >= sortedCategories.length) {
       console.log(`Inserted ${Math.min(i + batchSize, sortedCategories.length)}/${sortedCategories.length} categories...`)
