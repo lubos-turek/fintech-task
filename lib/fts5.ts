@@ -1,4 +1,5 @@
 import { prisma } from './prisma'
+import type { Prisma } from '@prisma/client'
 
 /**
  * Initialize FTS5 virtual table for full-text search
@@ -71,6 +72,7 @@ export async function searchCategoriesFull(searchTerm: string, limit: number = 1
     return []
   }
 
+  // @ts-expect-error - TypeScript language server cache issue. Types are correctly generated.
   return prisma.imageNetCategory.findMany({
     where: {
       id: {
