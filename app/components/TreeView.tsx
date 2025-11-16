@@ -1,58 +1,72 @@
 'use client';
 
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-interface TreeNode {
-  id: string;
-  label: string;
-  children?: TreeNode[];
+interface Category {
+  id: number;
+  path: string;
+  size: number;
+  depth: number;
+  parentPath: string | null;
 }
 
 interface TreeViewProps {
-  data: TreeNode[];
+  path: string;
 }
 
-function TreeNodeComponent({ node }: { node: TreeNode }) {
+export default function TreeView({ path }: TreeViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const hasChildren = node.children && node.children.length > 0;
+
+  // Extract the label from the path (the part after the last ">")
+  const label = path.includes(' > ') 
+    ? path.split(' > ').pop() || path
+    : path;
+
+  const { data: subcategories = [], isLoading } = useQuery<Category[]>({
+    queryKey: ['categories', path],
+    queryFn: async () => {
+      const res = await fetch(`/api/categories?parentPath=${encodeURIComponent(path)}`);
+      if (!res.ok) {
+        throw new Error('Failed to fetch subcategories');
+      }
+      return res.json();
+    },
+    enabled: isExpanded,
+  });
+
+  const hasChildren = subcategories.length > 0;
 
   return (
     <div className="ml-4">
       <div 
         className="flex items-center py-2 px-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded cursor-pointer"
-        onClick={() => hasChildren && setIsExpanded(!isExpanded)}
+        onClick={() => setIsExpanded(!isExpanded)}
       >
-        {hasChildren && (
-          <span className="mr-2 text-gray-500">
-            {isExpanded ? '▼' : '▶'}
+        <span className="mr-2 text-gray-500">
+          {isExpanded ? '▼' : '▶'}
+        </span>
+        {!hasChildren && !isLoading && <span className="mr-2 w-4" />}
+        <span className="text-gray-800 dark:text-gray-200">{label}</span>
+        {subcategories.length > 0 && (
+          <span className="ml-2 text-sm text-gray-500">
+            ({subcategories.length})
           </span>
         )}
-        {!hasChildren && <span className="mr-2 w-4" />}
-        <span className="text-gray-800 dark:text-gray-200">{node.label}</span>
       </div>
-      {hasChildren && isExpanded && (
+      {isExpanded && (
         <div className="ml-4 border-l-2 border-gray-200 dark:border-gray-700">
-          {node.children!.map((child) => (
-            <TreeNodeComponent key={child.id} node={child} />
-          ))}
+          {isLoading ? (
+            <div className="py-2 px-3 text-sm text-gray-500">Loading...</div>
+          ) : hasChildren ? (
+            subcategories.map((category) => (
+              <TreeView key={category.id} path={category.path} />
+            ))
+          ) : (
+            <div className="py-2 px-3 text-sm text-gray-500">No subcategories</div>
+          )}
         </div>
       )}
     </div>
   );
 }
-
-export default function TreeView({ data }: TreeViewProps) {
-  return (
-    <div className="w-full max-w-4xl bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
-        ImageNet Categories
-      </h2>
-      <div className="max-h-[600px] overflow-y-auto">
-        {data.map((node) => (
-          <TreeNodeComponent key={node.id} node={node} />
-        ))}
-      </div>
-    </div>
-  );
-}
-

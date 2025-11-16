@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { QueryClientProviderWrapper } from "./providers";
 
 export const metadata: Metadata = {
   title: "ImageNet Categories Explorer (Hire Me)",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>
+      </body>
     </html>
   );
 }
