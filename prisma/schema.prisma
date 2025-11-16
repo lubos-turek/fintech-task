@@ -11,12 +11,14 @@ model ImageNetCategory {
   id       Int                 @id @default(autoincrement())
   path     String              // Full category path, e.g., "ImageNet 2011 Fall Release > plant, flora, plant life"
   size     Int                 // Size value for this category
+  depth    Int                 // Depth of the node in the tree (0 for root, 1 for first level, etc.)
   parentId Int?                // Reference to parent category
   parent   ImageNetCategory?   @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
   children ImageNetCategory[]  @relation("CategoryHierarchy")
 
   @@index([path])
   @@index([parentId])
+  @@index([depth])
   @@map("imagenet_categories")
 }
 
