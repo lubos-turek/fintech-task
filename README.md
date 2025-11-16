@@ -42,9 +42,6 @@ Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwin
    # Push schema to database (creates database if it doesn't exist)
    npm run db:push
 
-   # Or run migrations
-   npm run db:migrate
-
    # Initialize FTS5 for full-text search
    npm run db:init-fts5
    ```
@@ -95,7 +92,6 @@ Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwin
 - `npm run lint` - Run ESLint
 - `npm run db:generate` - Generate Prisma Client
 - `npm run db:push` - Push schema changes to database
-- `npm run db:migrate` - Run database migrations
 - `npm run db:studio` - Open Prisma Studio (database GUI)
 
 ## Database
@@ -112,7 +108,6 @@ The schema defines an `ImageNetCategory` model with hierarchical relationships (
 
 - **Generate Prisma Client:** `npm run db:generate`
 - **Push schema changes:** `npm run db:push`
-- **Create migration:** `npm run db:migrate`
 - **Open Prisma Studio:** `npm run db:studio`
 
 ## Docker Volumes
@@ -128,7 +123,7 @@ The Docker setup uses volumes to persist:
 
 ## Notes
 
-- The SQLite database file is created automatically when you run `db:push` or `db:migrate`
+- The SQLite database file is created automatically when you run `db:push`
 - In Docker, the database is persisted in the `./data` directory
 - Make sure to run `db:generate` after modifying the Prisma schema
 - The production Dockerfile uses Next.js standalone output for optimal image size
