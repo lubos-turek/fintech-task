@@ -44,17 +44,26 @@ export async function initializeFTS5() {
 
 /**
  * Format search term for FTS5 query
- * FTS5 supports simple term searches - escape special characters
- * For simple term search, we can use the term directly without quotes
+ * FTS5 supports prefix matching with * operator
+ * Adds * suffix to each word to enable prefix matching (e.g., "anima*" matches "animal")
  */
 function formatFTS5Query(searchTerm: string): string {
-  // Escape special FTS5 characters that need escaping: ", ', \
-  // For FTS5 term search (not phrase), we escape special characters
-  let escaped = searchTerm.replace(/\\/g, '\\\\')
-  escaped = escaped.replace(/"/g, '""')
-  escaped = escaped.replace(/'/g, "''")
-  // For term search, return as-is (FTS5 will match anywhere in the text)
-  return escaped
+  // Split by whitespace to handle multi-word searches
+  const words = searchTerm.trim().split(/\s+/)
+  
+  // Process each word: escape special characters and add * for prefix matching
+  const processedWords = words.map(word => {
+    // Escape special FTS5 characters that need escaping: ", ', \
+    let escaped = word.replace(/\\/g, '\\\\')
+    escaped = escaped.replace(/"/g, '""')
+    escaped = escaped.replace(/'/g, "''")
+    // Add * at the end to enable prefix matching
+    // This allows "anima" to match "animal", "animate", etc.
+    return escaped + '*'
+  })
+  
+  // Join words with space (FTS5 treats space as AND)
+  return processedWords.join(' ')
 }
 
 /**
