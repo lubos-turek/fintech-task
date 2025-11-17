@@ -129,7 +129,7 @@ I focused mainly on the Frontend as I apply for Frontend role. I wanted to get t
 - `npm run db:studio` - Open Prisma Studio (database GUI)
 - `npm run db:init-fts5` - Initialize FTS5 virtual table for full-text search
 - `npm run import:xml` - Import ImageNet category data from `data/structure_released.xml`
-- `npm run export:tree` - Export category tree structure to `data/category-tree.json`
+- `npm run export:tree` - Export category tree structure from database to `data/category-tree.json`
 
 ## Environment Variables
 
