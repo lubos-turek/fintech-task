@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
 
 function highlightText(text: string, searchedText: string | undefined): ReactNode {
   if (!searchedText || !text) {
@@ -14,7 +14,11 @@ function highlightText(text: string, searchedText: string | undefined): ReactNod
   while ((index = lowerText.indexOf(lowerSearchedText, lastIndex)) !== -1) {
     // Add text before match (grey)
     if (index > lastIndex) {
-      parts.push(<span key={parts.length} className="text-gray-500">{text.substring(lastIndex, index)}</span>);
+      parts.push(
+        <span key={parts.length} className="text-gray-500">
+          {text.substring(lastIndex, index)}
+        </span>
+      );
     }
     // Add matched text in bold
     parts.push(<strong key={parts.length}>{text.substring(index, index + searchedText.length)}</strong>);
@@ -23,7 +27,11 @@ function highlightText(text: string, searchedText: string | undefined): ReactNod
 
   // Add remaining text (grey)
   if (lastIndex < text.length) {
-    parts.push(<span key={parts.length} className="text-gray-500">{text.substring(lastIndex)}</span>);
+    parts.push(
+      <span key={parts.length} className="text-gray-500">
+        {text.substring(lastIndex)}
+      </span>
+    );
   }
 
   // If no matches found, make entire text grey
@@ -36,15 +44,15 @@ function highlightText(text: string, searchedText: string | undefined): ReactNod
 
 export function getDisplayLabel(path: string, searchedText?: string): ReactNode {
   let processedPath = path;
-  
+
   // Strip first part before ' > ' separator
-  if (path.includes(' > ')) {
-    const parts = path.split(' > ');
-    processedPath = parts.slice(1).join(' > ');
+  if (path.includes(" > ")) {
+    const parts = path.split(" > ");
+    processedPath = parts.slice(1).join(" > ");
   }
-  
+
   // Split by ' > ' and join with styled › symbol
-  const parts = processedPath.split(' > ');
+  const parts = processedPath.split(" > ");
   return parts.map((part, index) => (
     <span key={index}>
       {index > 0 && <span className="text-gray-500"> › </span>}
@@ -52,4 +60,3 @@ export function getDisplayLabel(path: string, searchedText?: string): ReactNode 
     </span>
   ));
 }
-

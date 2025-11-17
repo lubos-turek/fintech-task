@@ -17,11 +17,7 @@ export default function Home() {
     <>
       <Header />
 
-      <SearchBar
-        onSearch={setSearchedText}
-        onEnter={setSearchedText}
-        placeholder="Search ImageNet categories..."
-      />
+      <SearchBar onSearch={setSearchedText} onEnter={setSearchedText} placeholder="Search ImageNet categories..." />
 
       <ContentContainer searchedText={searchedText}>
         <Loading isLoading={isSearching}>
@@ -36,7 +32,9 @@ export default function Home() {
                 />
               ))}
             </div>
-          ) : <EmptyResult />}
+          ) : (
+            <EmptyResult />
+          )}
         </Loading>
       </ContentContainer>
     </>

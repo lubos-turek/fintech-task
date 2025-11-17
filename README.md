@@ -25,16 +25,19 @@ Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwin
 ### Local Development
 
 1. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 2. **Set up environment variables:**
+
    ```bash
    cp .env.example .env
    ```
 
 3. **Set up the database:**
+
    ```bash
    # Generate Prisma Client
    npm run db:generate
@@ -50,6 +53,7 @@ Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwin
    ```
 
 4. **Start the development server:**
+
    ```bash
    npm run dev
    ```
@@ -59,6 +63,7 @@ Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwin
 ### Docker Development
 
 1. **Build and run with Docker Compose (development mode):**
+
    ```bash
    docker-compose -f docker-compose.dev.yml up --build
    ```
@@ -75,6 +80,7 @@ Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwin
 ### Docker Production
 
 1. **Build and run with Docker Compose (production mode):**
+
    ```bash
    docker-compose up --build
    ```
@@ -102,6 +108,7 @@ Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwin
 ## Database
 
 The project uses SQLite with Prisma. The database file is stored in:
+
 - Local development: `./dev.db`
 - Docker: `./data/dev.db`
 
@@ -129,6 +136,7 @@ To import ImageNet category data from the XML file:
    ```
 
 The script will:
+
 - Parse the XML file using streaming (memory-efficient for large files)
 - Transform nested synset structures into linear category paths
 - Calculate sizes (leaf node counts) for each category
@@ -138,6 +146,7 @@ The script will:
 ## Docker Volumes
 
 The Docker setup uses volumes to persist:
+
 - SQLite database files in `./data` directory
 - Prisma schema and migrations in `./prisma` directory
 

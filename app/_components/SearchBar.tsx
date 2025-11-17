@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useDebounce } from 'use-debounce';
+import { useState, useEffect } from "react";
+import { useDebounce } from "use-debounce";
 
 interface SearchBarProps {
   onSearch?: (query: string) => void;
@@ -9,12 +9,8 @@ interface SearchBarProps {
   placeholder?: string;
 }
 
-export default function SearchBar({ 
-  onSearch, 
-  onEnter,
-  placeholder = 'Search categories...' 
-}: SearchBarProps) {
-  const [query, setQuery] = useState('');
+export default function SearchBar({ onSearch, onEnter, placeholder = "Search categories..." }: SearchBarProps) {
+  const [query, setQuery] = useState("");
   const [debouncedQuery, { cancel }] = useDebounce(query, 1000);
 
   useEffect(() => {
@@ -22,10 +18,10 @@ export default function SearchBar({
   }, [debouncedQuery, onSearch]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       cancel();
-      console.log('Enter pressed, search:', query);
+      console.log("Enter pressed, search:", query);
       onEnter?.(query);
     }
   };
@@ -45,4 +41,3 @@ export default function SearchBar({
     </div>
   );
 }
-

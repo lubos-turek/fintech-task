@@ -3,4 +3,3 @@ export interface TreeViewProps {
   size?: number;
   searchedText?: string;
 }
-

@@ -1,15 +1,12 @@
-export const ExpandIcon = ({ isExpanded, size }: { isExpanded: boolean, size: number }) => {
+export const ExpandIcon = ({ isExpanded, size }: { isExpanded: boolean; size: number }) => {
   let symbol;
   if (size === 0) {
-    symbol = '●';
+    symbol = "●";
   } else if (isExpanded) {
-    symbol = '▼';
+    symbol = "▼";
   } else {
-    symbol = '▶';
+    symbol = "▶";
   }
 
-  return (<span className="mr-2 text-gray-500">
-    {symbol}
-  </span>)
+  return <span className="mr-2 text-gray-500">{symbol}</span>;
 };
-
