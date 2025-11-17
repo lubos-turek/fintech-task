@@ -1,18 +1,49 @@
 'use client';
 
+import { useState, useCallback } from 'react';
 import SearchBar from './components/SearchBar';
 import TreeView from './components/TreeView';
+import { getLabelFromPath } from './components/TreeView/utils';
+import { Category } from './components/TreeView/types';
 
 export default function Home() {
-  const handleSearch = (query: string) => {
-    // This will be called after 1 second of debounce
-    // Currently just logs to console as requested
-  };
+  const [searchResults, setSearchResults] = useState<Category[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
 
-  const handleEnter = (query: string) => {
-    // This will be called when Enter is pressed
-    // Currently just logs to console as requested
-  };
+  const performSearch = useCallback(async (query: string) => {
+    const trimmedQuery = query.trim();
+    setSearchQuery(trimmedQuery);
+
+    if (!trimmedQuery) {
+      setSearchResults([]);
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const res = await fetch(`/api/categories/search?q=${encodeURIComponent(trimmedQuery)}`);
+      if (!res.ok) {
+        throw new Error('Failed to search categories');
+      }
+      const results = await res.json();
+      setSearchResults(results);
+    } catch (error) {
+      console.error('Error searching categories:', error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  }, []);
+
+  const handleSearch = useCallback((query: string) => {
+    performSearch(query);
+  }, [performSearch]);
+
+  const handleEnter = useCallback((query: string) => {
+    performSearch(query);
+  }, [performSearch]);
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4">
@@ -35,6 +66,33 @@ export default function Home() {
             placeholder="Search ImageNet categories..."
           />
         </div>
+
+        {/* Search Results */}
+        {searchQuery && (
+          <div className="flex justify-center mb-6">
+            <div className="w-full max-w-4xl bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                Search Results
+              </h2>
+              {isSearching ? (
+                <div className="text-gray-600 dark:text-gray-400">Searching...</div>
+              ) : searchResults.length > 0 ? (
+                <div className="space-y-2">
+                  {searchResults.map((category) => (
+                    <div
+                      key={category.id}
+                      className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
+                    >
+                      {getLabelFromPath(category.path)}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-gray-600 dark:text-gray-400">No results found</div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Tree View */}
         <div className="flex justify-center">

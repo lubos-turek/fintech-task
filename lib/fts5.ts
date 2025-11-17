@@ -1,5 +1,5 @@
 import { prisma } from './prisma'
-import type { Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 /**
  * Initialize FTS5 virtual table for full-text search
@@ -43,18 +43,35 @@ export async function initializeFTS5() {
 }
 
 /**
+ * Format search term for FTS5 query
+ * FTS5 supports simple term searches - escape special characters
+ * For simple term search, we can use the term directly without quotes
+ */
+function formatFTS5Query(searchTerm: string): string {
+  // Escape special FTS5 characters that need escaping: ", ', \
+  // For FTS5 term search (not phrase), we escape special characters
+  let escaped = searchTerm.replace(/\\/g, '\\\\')
+  escaped = escaped.replace(/"/g, '""')
+  escaped = escaped.replace(/'/g, "''")
+  // For term search, return as-is (FTS5 will match anywhere in the text)
+  return escaped
+}
+
+/**
  * Search categories using FTS5
  * @param searchTerm - The search term to look for in category labels
  * @param limit - Maximum number of results to return
  * @returns Array of category IDs matching the search term
  */
 export async function searchCategories(searchTerm: string, limit: number = 100): Promise<number[]> {
-  const results = await prisma.$queryRaw<Array<{ rowid: number }>>`
-    SELECT rowid FROM imagenet_categories_fts 
-    WHERE imagenet_categories_fts MATCH ${searchTerm}
-    ORDER BY rank
-    LIMIT ${limit}
-  `
+  const formattedQuery = formatFTS5Query(searchTerm)
+  // Use $queryRawUnsafe for FTS5 MATCH queries
+  // SQLite FTS5 MATCH requires the query string to be embedded directly in SQL
+  // Escape single quotes for SQL string literal safety
+  const sqlEscaped = formattedQuery.replace(/'/g, "''")
+  const results = await prisma.$queryRawUnsafe<Array<{ rowid: number }>>(
+    `SELECT rowid FROM imagenet_categories_fts WHERE imagenet_categories_fts MATCH '${sqlEscaped}' ORDER BY rank LIMIT ${limit}`
+  )
 
   return results.map((r) => r.rowid)
 }
@@ -77,10 +94,6 @@ export async function searchCategoriesFull(searchTerm: string, limit: number = 1
       id: {
         in: categoryIds,
       },
-    },
-    include: {
-      parent: true,
-      children: true,
     },
   })
 }

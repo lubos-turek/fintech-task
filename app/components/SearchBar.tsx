@@ -18,10 +18,8 @@ export default function SearchBar({
   const [debouncedQuery, { cancel }] = useDebounce(query, 1000);
 
   useEffect(() => {
-    if (debouncedQuery.trim()) {
-      console.log('Debounced search:', debouncedQuery);
-      onSearch?.(debouncedQuery);
-    }
+    // Call onSearch for both empty and non-empty queries to handle clearing results
+    onSearch?.(debouncedQuery);
   }, [debouncedQuery, onSearch]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
