@@ -22,6 +22,8 @@ I focused mainly on the Frontend as I apply for Frontend role. I wanted to get t
 
 ✅ I wrote a script that parses the XML using SAX, flattens the tree and batch-inserts the nodes into the database. The script stores tuples of `(path: string, size: number)` along with hierarchical metadata (parentPath, depth, label): [scripts/import-xml.ts](scripts/import-xml.ts)
 
+🏃 **Run the script**: `npm run import:xml`
+
 ### Task 2
 
 * *Write an algorithm that will output such a tree. You have to read this data in a linear form from the database.*
@@ -30,6 +32,8 @@ I focused mainly on the Frontend as I apply for Frontend role. I wanted to get t
 ✅ In the [`export-tree`](scripts/export-tree.ts) script, I read all items from the database and group them by `parentPath`. Then I use depth-first-search (DFS) through the tree from the root node to construct the tree structure. The tree is output to [`data/category-tree.json`](data/category-tree.json).
 
 ✅ **Complexity Analysis**: O(n) time complexity - grouping visits each node once (O(n)), and DFS reconstruction also visits each node once (O(n)), where n is the total number of categories.
+
+🏃 **Run the script**: `npm run export:tree`
 
 ### Task 3
 
@@ -134,6 +138,7 @@ Run it as follows:
 - `npm run db:studio` - Open Prisma Studio (database GUI)
 - `npm run db:init-fts5` - Initialize FTS5 virtual table for full-text search
 - `npm run import:xml` - Import ImageNet category data from `data/structure_released.xml`
+- `npm run export:tree` - Export category tree structure to `data/category-tree.json`
 
 ## Database
 
@@ -153,6 +158,7 @@ The schema defines an `ImageNetCategory` model with hierarchical relationships (
 - **Open Prisma Studio:** `npm run db:studio`
 - **Initialize FTS5:** `npm run db:init-fts5`
 - **Import XML data:** `npm run import:xml`
+- **Export tree structure:** `npm run export:tree`
 
 ### Importing Data
 
@@ -172,6 +178,38 @@ The script will:
 - Calculate sizes (leaf node counts) for each category
 - Insert all categories into the database with proper parent-child relationships
 - Clear existing data before importing (if any)
+
+### Exporting Data
+
+To export the category tree structure from the database to a JSON file:
+
+1. Ensure the database has been populated with data (`npm run import:xml`)
+2. Run the export script:
+   ```bash
+   npm run export:tree
+   ```
+
+The script will:
+
+- Load all categories from the database (ordered by depth)
+- Group categories by `parentPath` for efficient tree construction
+- Reconstruct the tree structure using depth-first-search (DFS) starting from the root node
+- Export the tree to `data/category-tree.json` in the following format:
+  ```json
+  {
+    "name": "ImageNet 2011 Fall Release",
+    "size": 21841,
+    "children": [
+      {
+        "name": "plant, flora, plant life",
+        "size": 1000,
+        "children": [...]
+      }
+    ]
+  }
+  ```
+
+**Note**: The export script uses an O(n) algorithm - grouping and DFS reconstruction each visit each node exactly once, where n is the total number of categories.
 
 ## Docker Volumes
 
