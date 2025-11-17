@@ -4,11 +4,11 @@ Browse and search the ImageNet category hierarchy with an interactive tree view 
 
 Built with Next.js 16, React 19, TypeScript, React Query, Prisma, SQLite, Docker, and Tailwind CSS.
 
-I focused mainly on the Frontend as I apply for Frontend role. I wanted to get the important parts of the backend right (linear data transformation, fast search) but then I spent more time to polish the frotnend.
+I focused mainly on the Frontend as I apply for Frontend role. I wanted to get the important parts of the backend right (linear data transformation, fast search) but then I spent more time to polish the frontend.
 
 ## Design Decisions
 
-- **Streamed Data Ingestion**: Data is parsed using SAX and batch insterted into the database.
+- **Streamed Data Ingestion**: Data is parsed using SAX and batch inserted into the database.
 
 - **SQLite Database**: SQLite is used for simplicity. FTS5 enables fast search.
 
@@ -20,15 +20,16 @@ I focused mainly on the Frontend as I apply for Frontend role. I wanted to get t
 
 *Create a database (use any database system you like) to store these tuples `(string, number)` and fill it with the data you obtained in the first step.*
 
-✅ I wrote a script parses the XML using SAX, flattens the tree and batch-inserts the nodes into the database: [scripts/import-xml.ts](scripts/import-xml.ts)
+✅ I wrote a script that parses the XML using SAX, flattens the tree and batch-inserts the nodes into the database. The script stores tuples of `(path: string, size: number)` along with hierarchical metadata (parentPath, depth, label): [scripts/import-xml.ts](scripts/import-xml.ts)
 
 ### Task 2
 
 * *Write an algorithm that will output such a tree. You have to read this data in a linear form from the database.*
 * *What is the complexity of your algorithm (in big O notation)?*
 
-✅ in [`export-tree` script](scripts/export-tree.ts) I read all the items from the database and group them by `parentPath`. Then I depth-first-search through the tree from the root node to construct the tree. The tree is then output into [`data/category-tree.json`](data/category-tree.json)
-✅ O(n) complexity: grouping visits each node once, and DFS reconstruction also visits each node once.
+✅ In the [`export-tree` script](scripts/export-tree.ts), I read all items from the database and group them by `parentPath`. Then I use depth-first-search (DFS) through the tree from the root node to construct the tree structure. The tree is output to [`data/category-tree.json`](data/category-tree.json).
+
+✅ **Complexity Analysis**: O(n) time complexity - grouping visits each node once (O(n)), and DFS reconstruction also visits each node once (O(n)), where n is the total number of categories.
 
 ### Task 3
 
@@ -36,7 +37,12 @@ I focused mainly on the Frontend as I apply for Frontend role. I wanted to get t
 * *Don’t load the whole dataset at once on the frontend*
 * *Implement search in this UI*
 
-✅ Created a frontend for this. Run it as follows:
+✅ Created a frontend interface with the following features:
+- **Interactive Tree View**: Expandable/collapsible category hierarchy with lazy loading (categories load on-demand when expanded)
+- **Debounced Search**: Full-text search with 1-second debounce to reduce API calls, powered by SQLite FTS5
+- **Search Highlighting**: Matching text is highlighted in search results
+
+Run it as follows:
 
 ## Prerequisites
 
