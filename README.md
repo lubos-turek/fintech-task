@@ -27,7 +27,7 @@ I focused mainly on the Frontend as I apply for Frontend role. I wanted to get t
 * *Write an algorithm that will output such a tree. You have to read this data in a linear form from the database.*
 * *What is the complexity of your algorithm (in big O notation)?*
 
-✅ In the [`export-tree` script](scripts/export-tree.ts), I read all items from the database and group them by `parentPath`. Then I use depth-first-search (DFS) through the tree from the root node to construct the tree structure. The tree is output to [`data/category-tree.json`](data/category-tree.json).
+✅ In the [`export-tree`](scripts/export-tree.ts) script, I read all items from the database and group them by `parentPath`. Then I use depth-first-search (DFS) through the tree from the root node to construct the tree structure. The tree is output to [`data/category-tree.json`](data/category-tree.json).
 
 ✅ **Complexity Analysis**: O(n) time complexity - grouping visits each node once (O(n)), and DFS reconstruction also visits each node once (O(n)), where n is the total number of categories.
 
