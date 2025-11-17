@@ -8,11 +8,34 @@ I focused mainly on the Frontend as I apply for Frontend role. I wanted to get t
 
 ## Design Decisions
 
-- **Streamed Data Ingestion**: Data is streamed using SAX into the database to prevent memory and CPU exhaustion with large datasets.
+- **Streamed Data Ingestion**: Data is parsed using SAX and batch insterted into the database.
 
 - **SQLite Database**: SQLite is used for simplicity. FTS5 enables fast search.
 
 - **Lazy-Loaded Categories**: Categories are loaded on-demand to improve initial page load and reduce memory usage.
+
+## Tasks
+
+### Task 1
+
+Create a database (use any database system you like) to store these tuples `(string, number)` and fill it with the data you obtained in the first step.
+
+scripts/import-xml.ts
+
+### Task 2
+
+* Write an algorithm that will output such a tree. You have to read this data in a linear form from the database.
+* What is the complexity of your algorithm (in big O notation)?
+
+Considering the read from the application is a constant operation the big O complexity of the algorithm is linear. what means n where n is the number of nodes in the tree.
+
+### Task 3
+
+* Design and build an interface to show this data. Choose yourself what you would like to highlight in the data and how to show it.
+* Don’t load the whole dataset at once on the frontend
+* Implement search in this UI
+
+Created a frontend for this. Run it as follows:
 
 ## Prerequisites
 
