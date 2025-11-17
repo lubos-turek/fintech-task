@@ -70,23 +70,7 @@ Run it as follows:
    cp .env.example .env
    ```
 
-3. **Set up the database:**
-
-   ```bash
-   # Generate Prisma Client
-   npm run db:generate
-
-   # Push schema to database (creates database if it doesn't exist)
-   npm run db:push
-
-   # Initialize FTS5 for full-text search
-   npm run db:init-fts5
-
-   # Import data from structure_released.xml
-   npm run import:xml
-   ```
-
-4. **Start the development server:**
+3. **Start the development server:**
 
    ```bash
    npm run dev
