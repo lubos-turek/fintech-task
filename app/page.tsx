@@ -3,7 +3,6 @@
 import { useState, useCallback } from 'react';
 import SearchBar from './components/SearchBar';
 import TreeView from './components/TreeView';
-import { getLabelFromPath } from './components/TreeView/utils';
 import { Category } from './components/TreeView/types';
 
 export default function Home() {
@@ -70,7 +69,7 @@ export default function Home() {
         {/* Search Results */}
         {searchQuery && (
           <div className="flex justify-center mb-6">
-            <div className="w-full max-w-4xl bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+            <div className="w-full max-w-6xl bg-white dark:bg-gray-900 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                 Search Results
               </h2>
@@ -79,12 +78,12 @@ export default function Home() {
               ) : searchResults.length > 0 ? (
                 <div className="space-y-2">
                   {searchResults.map((category) => (
-                    <div
+                    <TreeView
                       key={category.id}
-                      className="px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded"
-                    >
-                      {getLabelFromPath(category.path)}
-                    </div>
+                      path={category.path}
+                      size={category.size}
+                      displayWholePath={true}
+                    />
                   ))}
                 </div>
               ) : (

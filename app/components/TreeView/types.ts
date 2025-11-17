@@ -9,5 +9,6 @@ export interface Category {
 export interface TreeViewProps {
   path: string;
   size?: number;
+  displayWholePath?: boolean;
 }
 

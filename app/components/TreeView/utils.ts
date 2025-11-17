@@ -1,6 +1,9 @@
 import { Category } from './types';
 
-export function getLabelFromPath(path: string): string {
+export function getLabelFromPath(path: string, displayWholePath: boolean = false): string {
+  if (displayWholePath) {
+    return path.replace(/ > /g, ' ▶ ');
+  }
   if (!path.includes(' > ')) {
     return path;
   }

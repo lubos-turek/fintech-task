@@ -10,9 +10,9 @@ import { Loading } from './components/Loading';
 import { SubcategoriesContainer } from './components/SubcategoriesContainer';
 import { CategoryContainer } from './components/CategoryContainer';
 
-export default function TreeView({ path, size }: TreeViewProps) {
+export default function TreeView({ path, size, displayWholePath = false }: TreeViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const label = useMemo(() => getLabelFromPath(path), [path]);
+  const label = useMemo(() => getLabelFromPath(path, displayWholePath), [path, displayWholePath]);
 
   const { data: subcategories = [], isLoading } = useQuery<Category[]>({
     queryKey: ['categories', path],
