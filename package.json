@@ -14,7 +14,8 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:init-fts5": "tsx scripts/init-fts5.ts",
-    "import:xml": "tsx scripts/import-xml.ts"
+    "import:xml": "tsx scripts/import-xml.ts",
+    "export:tree": "tsx scripts/export-tree.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",
