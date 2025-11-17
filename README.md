@@ -46,7 +46,7 @@ I focused mainly on the Frontend as I apply for Frontend role. I wanted to get t
 - **Debounced Search**: Full-text search with 1-second debounce to reduce API calls, powered by SQLite FTS5
 - **Search Highlighting**: Matching text is highlighted in search results
 
-🏃 **Run the application**: `docker-compose -f docker-compose.dev.yml up --build` and open [http://localhost:3000](http://localhost:3000) in your browser.
+🏃 **Run the production application**: `docker-compose up --build` and open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Prerequisites
 
