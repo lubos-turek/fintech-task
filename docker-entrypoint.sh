@@ -8,36 +8,50 @@ if [ ! -d "/app/data" ]; then
   mkdir -p /app/data
 fi
 
+# Check if database already exists and has data
+PRISMA_DB="/app/prisma/dev.db"
+DB_EXISTS=false
+if [ -f "$PRISMA_DB" ]; then
+  DB_SIZE=$(stat -f%z "$PRISMA_DB" 2>/dev/null || stat -c%s "$PRISMA_DB" 2>/dev/null || echo "0")
+  if [ "$DB_SIZE" -gt 1000000 ]; then
+    echo "Database file exists at $PRISMA_DB and appears to have data (${DB_SIZE} bytes). Skipping schema push."
+    DB_EXISTS=true
+    DB_PUSH_SUCCESS=true
+  fi
+fi
+
 echo "Initializing database..."
 
-# Run database migrations/push (use npx if available, otherwise use node directly)
-DB_PUSH_SUCCESS=false
-if command -v npx >/dev/null 2>&1; then
-  echo "Running prisma db push with npx..."
-  if npx prisma db push --skip-generate; then
-    DB_PUSH_SUCCESS=true
-    echo "Database schema initialized successfully."
+# Run database migrations/push only if database doesn't exist or is empty
+if [ "$DB_EXISTS" = false ]; then
+  DB_PUSH_SUCCESS=false
+  if command -v npx >/dev/null 2>&1; then
+    echo "Running prisma db push with npx..."
+    if npx prisma db push --skip-generate; then
+      DB_PUSH_SUCCESS=true
+      echo "Database schema initialized successfully."
+    else
+      echo "Warning: prisma db push failed, but continuing..."
+    fi
+  elif [ -f "node_modules/prisma/build/index.js" ]; then
+    echo "Running prisma db push with node..."
+    if node node_modules/prisma/build/index.js db push --skip-generate; then
+      DB_PUSH_SUCCESS=true
+      echo "Database schema initialized successfully."
+    else
+      echo "Warning: prisma db push failed, but continuing..."
+    fi
+  elif [ -f "node_modules/.bin/prisma" ]; then
+    echo "Running prisma db push with node_modules/.bin/prisma..."
+    if node node_modules/.bin/prisma db push --skip-generate; then
+      DB_PUSH_SUCCESS=true
+      echo "Database schema initialized successfully."
+    else
+      echo "Warning: prisma db push failed, but continuing..."
+    fi
   else
-    echo "Warning: prisma db push failed, but continuing..."
+    echo "Warning: Could not find prisma command, skipping database initialization."
   fi
-elif [ -f "node_modules/prisma/build/index.js" ]; then
-  echo "Running prisma db push with node..."
-  if node node_modules/prisma/build/index.js db push --skip-generate; then
-    DB_PUSH_SUCCESS=true
-    echo "Database schema initialized successfully."
-  else
-    echo "Warning: prisma db push failed, but continuing..."
-  fi
-elif [ -f "node_modules/.bin/prisma" ]; then
-  echo "Running prisma db push with node_modules/.bin/prisma..."
-  if node node_modules/.bin/prisma db push --skip-generate; then
-    DB_PUSH_SUCCESS=true
-    echo "Database schema initialized successfully."
-  else
-    echo "Warning: prisma db push failed, but continuing..."
-  fi
-else
-  echo "Warning: Could not find prisma command, skipping database initialization."
 fi
 
 # Initialize FTS5 (use tsx directly if available, otherwise use npm)

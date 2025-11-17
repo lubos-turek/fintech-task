@@ -3,8 +3,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Install dependencies
-RUN apk add --no-cache libc6-compat
+# Install dependencies including OpenSSL for Prisma (Prisma 5.x supports OpenSSL 3.0)
+RUN apk add --no-cache libc6-compat openssl
 
 # Copy package files
 COPY package.json package-lock.json* ./
@@ -18,14 +18,15 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
-# Copy entrypoint script
+# Copy entrypoint script and ensure it's executable
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh && \
+    ls -la /app/docker-entrypoint.sh
 
 # Expose port
 EXPOSE 3000
 
-# Use entrypoint script
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+# Use entrypoint script (using sh explicitly for better compatibility)
+ENTRYPOINT ["/bin/sh", "/app/docker-entrypoint.sh"]
 CMD ["npm", "run", "dev"]
 
