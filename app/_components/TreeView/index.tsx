@@ -7,7 +7,7 @@ import { getDisplayLabel } from './utils';
 import { fetchSubcategories } from '@/lib/categories';
 import { ExpandIcon } from './components/ExpandIcon';
 import { SubcategoriesCount } from './components/SubcategoriesCount';
-import { Loading } from './components/Loading';
+import { Loading } from '../Loading';
 import { SubcategoriesContainer } from './components/SubcategoriesContainer';
 import { CategoryContainer } from './components/CategoryContainer';
 
