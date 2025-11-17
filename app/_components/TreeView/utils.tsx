@@ -62,11 +62,3 @@ export function getDisplayLabel(path: string, displayWholePath: boolean = false,
   return highlightText(lastPart || processedPath, searchedText, isSearchResult);
 }
 
-export async function fetchSubcategories(path: string): Promise<Category[]> {
-  const res = await fetch(`/api/categories?parentPath=${encodeURIComponent(path)}`);
-  if (!res.ok) {
-    throw new Error('Failed to fetch subcategories');
-  }
-  return res.json();
-}
-

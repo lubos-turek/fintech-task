@@ -3,7 +3,8 @@
 import { useMemo,useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TreeViewProps, Category } from './types';
-import { getDisplayLabel, fetchSubcategories } from './utils';
+import { getDisplayLabel } from './utils';
+import { fetchSubcategories } from '@/lib/categories';
 import { ExpandIcon } from './components/ExpandIcon';
 import { SubcategoriesCount } from './components/SubcategoriesCount';
 import { Loading } from './components/Loading';

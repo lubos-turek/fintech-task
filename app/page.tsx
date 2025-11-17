@@ -2,26 +2,8 @@
 
 import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import SearchBar from "./components/SearchBar";
-import TreeView from "./components/TreeView";
-import ContentContainer from "./_components/ContentContainer";
-import Header from "./_components/Header";
-import StyleWrapper from "./_components/StyleWrapper";
-import { Category } from "./components/TreeView/types";
-
-const DEFAULT_SEARCH_QUERY = "ImageNet 2011 Fall Release";
-
-async function fetchSearchResults(query: string): Promise<Category[]> {
-  const trimmedQuery = query.trim();
-  const actualQuery = trimmedQuery || DEFAULT_SEARCH_QUERY;
-  const res = await fetch(
-    `/api/categories/search?q=${encodeURIComponent(actualQuery)}`,
-  );
-  if (!res.ok) {
-    throw new Error("Failed to search categories");
-  }
-  return res.json();
-}
+import { SearchBar, TreeView, ContentContainer, Header, StyleWrapper, Category } from "./_components";
+import { fetchSearchResults, DEFAULT_SEARCH_QUERY } from "@/lib/categories";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
