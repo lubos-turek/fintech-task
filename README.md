@@ -155,9 +155,6 @@ The Docker setup uses volumes to persist:
 - `DATABASE_URL` - SQLite database connection string (default: `file:./dev.db`)
 - `NODE_ENV` - Node environment (development/production)
 
-## Notes
+## How I would proceed
 
-- The SQLite database file is created automatically when you run `db:push`
-- In Docker, the database is persisted in the `./data` directory
-- Make sure to run `db:generate` after modifying the Prisma schema
-- The production Dockerfile uses Next.js standalone output for optimal image size
+- Adding tests
