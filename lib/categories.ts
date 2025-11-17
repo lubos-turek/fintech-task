@@ -1,4 +1,4 @@
-import { Category } from "@/app/_components/TreeView/types";
+import { Category } from "@/app/_components";
 
 export const DEFAULT_SEARCH_QUERY = "ImageNet 2011 Fall Release";
 

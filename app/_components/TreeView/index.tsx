@@ -5,11 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 import { TreeViewProps, Category } from './types';
 import { getDisplayLabel } from './utils';
 import { fetchSubcategories } from '@/lib/categories';
-import { ExpandIcon } from './components/ExpandIcon';
-import { SubcategoriesCount } from './components/SubcategoriesCount';
-import { Loading } from '../Loading';
-import { SubcategoriesContainer } from './components/SubcategoriesContainer';
-import { CategoryContainer } from './components/CategoryContainer';
+import { ExpandIcon, SubcategoriesCount, SubcategoriesContainer, CategoryContainer } from './components';
+import { Loading } from '../';
 
 export default function TreeView({ path, size, displayWholePath = false, isSearchResult = false, searchedText }: TreeViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
