@@ -1,46 +1,29 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { SearchBar, TreeView, ContentContainer, Header, StyleWrapper, Loading, Category } from "./_components";
+import { SearchBar, TreeView, ContentContainer, Header, StyleWrapper, Loading, EmptyResult, Category } from "./_components";
 import { fetchSearchResults, DEFAULT_SEARCH_QUERY } from "@/lib/categories";
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchedText, setSearchedText] = useState("");
 
   const { data: searchResults = [], isLoading: isSearching } = useQuery<Category[]>({
-    queryKey: ["categories", "search", searchQuery],
-    queryFn: () => fetchSearchResults(searchQuery),
+    queryKey: ["categories", "search", searchedText],
+    queryFn: () => fetchSearchResults(searchedText),
   });
-
-  const handleSearch = useCallback(
-    (query: string) => {
-      setSearchQuery(query);
-    },
-    [],
-  );
-
-  const handleEnter = useCallback(
-    (query: string) => {
-      setSearchQuery(query);
-    },
-    [],
-  );
 
   return (
     <StyleWrapper>
       <Header />
 
       <SearchBar
-        onSearch={handleSearch}
-        onEnter={handleEnter}
+        onSearch={setSearchedText}
+        onEnter={setSearchedText}
         placeholder="Search ImageNet categories..."
       />
 
-      <ContentContainer>
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-          Search Results
-        </h2>
+      <ContentContainer searchedText={searchedText}>
         <Loading isLoading={isSearching}>
           {searchResults.length > 0 ? (
             <div className="space-y-2">
@@ -51,15 +34,11 @@ export default function Home() {
                   size={category.size}
                   displayWholePath={true}
                   isSearchResult={true}
-                  searchedText={searchQuery || DEFAULT_SEARCH_QUERY}
+                  searchedText={searchedText || DEFAULT_SEARCH_QUERY}
                 />
               ))}
             </div>
-          ) : (
-            <div className="text-gray-600 dark:text-gray-400">
-              No results found
-            </div>
-          )}
+          ) : <EmptyResult />}
         </Loading>
       </ContentContainer>
     </StyleWrapper>
