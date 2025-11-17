@@ -1,4 +1,4 @@
-import { Category } from "@/app/_components";
+import { Category } from "./types";
 
 export const DEFAULT_SEARCH_QUERY = "ImageNet 2011 Fall Release";
 

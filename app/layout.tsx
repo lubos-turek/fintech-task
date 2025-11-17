@@ -15,7 +15,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>
+        <main className="min-h-screen bg-gray-50 dark:bg-gray-950 py-12 px-4">
+          <div className="max-w-6xl mx-auto">
+            <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>
+          </div>
+        </main>
       </body>
     </html>
   );

@@ -1,8 +1,7 @@
 import React, { ReactNode } from 'react';
-import { Category } from './types';
 
-function highlightText(text: string, searchedText: string | undefined, isSearchResult: boolean): ReactNode {
-  if (!isSearchResult || !searchedText || !text) {
+function highlightText(text: string, searchedText: string | undefined): ReactNode {
+  if (!searchedText || !text) {
     return text;
   }
 
@@ -13,7 +12,7 @@ function highlightText(text: string, searchedText: string | undefined, isSearchR
   let index = 0;
 
   while ((index = lowerText.indexOf(lowerSearchedText, lastIndex)) !== -1) {
-    // Add text before match (grey when isSearchResult is true)
+    // Add text before match (grey)
     if (index > lastIndex) {
       parts.push(<span key={parts.length} className="text-gray-500">{text.substring(lastIndex, index)}</span>);
     }
@@ -22,7 +21,7 @@ function highlightText(text: string, searchedText: string | undefined, isSearchR
     lastIndex = index + searchedText.length;
   }
 
-  // Add remaining text (grey when isSearchResult is true)
+  // Add remaining text (grey)
   if (lastIndex < text.length) {
     parts.push(<span key={parts.length} className="text-gray-500">{text.substring(lastIndex)}</span>);
   }
@@ -35,30 +34,22 @@ function highlightText(text: string, searchedText: string | undefined, isSearchR
   return <>{parts}</>;
 }
 
-export function getDisplayLabel(path: string, displayWholePath: boolean = false, isSearchResult: boolean = false, searchedText?: string): ReactNode {
+export function getDisplayLabel(path: string, searchedText?: string): ReactNode {
   let processedPath = path;
   
-  // Strip first part before ' > ' separator if isSearchResult is true
-  if (isSearchResult && path.includes(' > ')) {
+  // Strip first part before ' > ' separator
+  if (path.includes(' > ')) {
     const parts = path.split(' > ');
     processedPath = parts.slice(1).join(' > ');
   }
   
-  if (displayWholePath) {
-    // Split by ' > ' and join with styled › symbol
-    const parts = processedPath.split(' > ');
-    return parts.map((part, index) => (
-      <span key={index}>
-        {index > 0 && <span className="text-gray-500"> › </span>}
-        {highlightText(part, searchedText, isSearchResult)}
-      </span>
-    ));
-  }
-  if (!processedPath.includes(' > ')) {
-    return highlightText(processedPath, searchedText, isSearchResult);
-  }
+  // Split by ' > ' and join with styled › symbol
   const parts = processedPath.split(' > ');
-  const lastPart = parts[parts.length - 1];
-  return highlightText(lastPart || processedPath, searchedText, isSearchResult);
+  return parts.map((part, index) => (
+    <span key={index}>
+      {index > 0 && <span className="text-gray-500"> › </span>}
+      {highlightText(part, searchedText)}
+    </span>
+  ));
 }
 

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { SearchBar, TreeView, ContentContainer, Header, StyleWrapper, Loading, EmptyResult, Category } from "./_components";
+import { SearchBar, TreeView, ContentContainer, Header, Loading, EmptyResult, Category } from "./_components";
 import { fetchSearchResults, DEFAULT_SEARCH_QUERY } from "@/lib/categories";
 
 export default function Home() {
@@ -14,7 +14,7 @@ export default function Home() {
   });
 
   return (
-    <StyleWrapper>
+    <>
       <Header />
 
       <SearchBar
@@ -32,8 +32,6 @@ export default function Home() {
                   key={category.id}
                   path={category.path}
                   size={category.size}
-                  displayWholePath={true}
-                  isSearchResult={true}
                   searchedText={searchedText || DEFAULT_SEARCH_QUERY}
                 />
               ))}
@@ -41,6 +39,6 @@ export default function Home() {
           ) : <EmptyResult />}
         </Loading>
       </ContentContainer>
-    </StyleWrapper>
+    </>
   );
 }
