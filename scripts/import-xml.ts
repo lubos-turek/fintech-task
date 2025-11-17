@@ -3,6 +3,15 @@ import * as path from 'path'
 import * as sax from 'sax'
 import { prisma } from '../lib/prisma'
 
+function getLabelFromPath(path: string): string {
+  if (!path.includes(' > ')) {
+    return path;
+  }
+  const parts = path.split(' > ');
+  const lastPart = parts[parts.length - 1];
+  return lastPart || path;
+}
+
 interface SynsetNode {
   words: string
   wnid: string
@@ -121,10 +130,14 @@ async function insertIntoDatabase(categories: CategoryData[]) {
       // Find parent path by removing last " > " segment
       const lastSeparator = cat.path.lastIndexOf(' > ')
       const parentPath = lastSeparator === -1 ? null : cat.path.substring(0, lastSeparator)
+      
+      // Extract label from path (last part after " > " or whole path if not present)
+      const label = getLabelFromPath(cat.path)
 
       return prisma.imageNetCategory.create({
         data: {
           path: cat.path,
+          label,
           size: cat.size,
           depth: cat.depth,
           parentPath

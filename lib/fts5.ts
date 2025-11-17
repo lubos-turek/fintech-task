@@ -9,7 +9,7 @@ export async function initializeFTS5() {
   await prisma.$executeRaw`
     CREATE VIRTUAL TABLE IF NOT EXISTS imagenet_categories_fts USING fts5(
       id UNINDEXED,
-      path,
+      label,
       content='imagenet_categories',
       content_rowid='id'
     )
@@ -18,33 +18,33 @@ export async function initializeFTS5() {
   // Create triggers to keep FTS5 table in sync
   await prisma.$executeRaw`
     CREATE TRIGGER IF NOT EXISTS imagenet_categories_fts_insert AFTER INSERT ON imagenet_categories BEGIN
-      INSERT INTO imagenet_categories_fts(rowid, path) VALUES (new.id, new.path);
+      INSERT INTO imagenet_categories_fts(rowid, label) VALUES (new.id, new.label);
     END
   `
 
   await prisma.$executeRaw`
     CREATE TRIGGER IF NOT EXISTS imagenet_categories_fts_delete AFTER DELETE ON imagenet_categories BEGIN
-      INSERT INTO imagenet_categories_fts(imagenet_categories_fts, rowid, path) VALUES('delete', old.id, old.path);
+      INSERT INTO imagenet_categories_fts(imagenet_categories_fts, rowid, label) VALUES('delete', old.id, old.label);
     END
   `
 
   await prisma.$executeRaw`
     CREATE TRIGGER IF NOT EXISTS imagenet_categories_fts_update AFTER UPDATE ON imagenet_categories BEGIN
-      INSERT INTO imagenet_categories_fts(imagenet_categories_fts, rowid, path) VALUES('delete', old.id, old.path);
-      INSERT INTO imagenet_categories_fts(rowid, path) VALUES (new.id, new.path);
+      INSERT INTO imagenet_categories_fts(imagenet_categories_fts, rowid, label) VALUES('delete', old.id, old.label);
+      INSERT INTO imagenet_categories_fts(rowid, label) VALUES (new.id, new.label);
     END
   `
 
   // Populate FTS5 table with existing data
   await prisma.$executeRaw`
-    INSERT OR IGNORE INTO imagenet_categories_fts(rowid, path) 
-    SELECT id, path FROM imagenet_categories
+    INSERT OR IGNORE INTO imagenet_categories_fts(rowid, label) 
+    SELECT id, label FROM imagenet_categories
   `
 }
 
 /**
  * Search categories using FTS5
- * @param searchTerm - The search term to look for in category paths
+ * @param searchTerm - The search term to look for in category labels
  * @param limit - Maximum number of results to return
  * @returns Array of category IDs matching the search term
  */
@@ -61,7 +61,7 @@ export async function searchCategories(searchTerm: string, limit: number = 100):
 
 /**
  * Search categories and return full category objects
- * @param searchTerm - The search term to look for in category paths
+ * @param searchTerm - The search term to look for in category labels
  * @param limit - Maximum number of results to return
  * @returns Array of ImageNetCategory objects matching the search term
  */

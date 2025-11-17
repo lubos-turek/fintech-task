@@ -10,6 +10,7 @@ datasource db {
 model ImageNetCategory {
   id         Int     @id @default(autoincrement())
   path       String  // Full category path, e.g., "ImageNet 2011 Fall Release > plant, flora, plant life"
+  label      String  // Last part of path after last " > " if present, or whole path if not
   size       Int     // Size value for this category
   depth      Int     // Depth of the node in the tree (0 for root, 1 for first level, etc.)
   parentPath String? // Path of the parent category
