@@ -4,7 +4,7 @@ import { QueryClientProviderWrapper } from "./providers";
 
 export const metadata: Metadata = {
   title: "ImageNet Categories Explorer (Hire Me)",
-  description: "Next.js 16 with React 19 and Prisma",
+  description: "ImageNet Categories Explorer (Hire Me) made with Next.js 16 with React 19 and Prisma",
 };
 
 export default function RootLayout({

@@ -83,6 +83,8 @@ export default function Home() {
                       path={category.path}
                       size={category.size}
                       displayWholePath={true}
+                      isSearchResult={true}
+                      searchedText={searchQuery}
                     />
                   ))}
                 </div>

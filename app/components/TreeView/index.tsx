@@ -3,16 +3,16 @@
 import { useMemo,useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TreeViewProps, Category } from './types';
-import { getLabelFromPath, fetchSubcategories } from './utils';
+import { getDisplayLabel, fetchSubcategories } from './utils';
 import { ExpandIcon } from './components/ExpandIcon';
 import { SubcategoriesCount } from './components/SubcategoriesCount';
 import { Loading } from './components/Loading';
 import { SubcategoriesContainer } from './components/SubcategoriesContainer';
 import { CategoryContainer } from './components/CategoryContainer';
 
-export default function TreeView({ path, size, displayWholePath = false }: TreeViewProps) {
+export default function TreeView({ path, size, displayWholePath = false, isSearchResult = false, searchedText }: TreeViewProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const label = useMemo(() => getLabelFromPath(path, displayWholePath), [path, displayWholePath]);
+  const label = useMemo(() => getDisplayLabel(path, displayWholePath, isSearchResult, searchedText), [path, displayWholePath, isSearchResult, searchedText]);
 
   const { data: subcategories = [], isLoading } = useQuery<Category[]>({
     queryKey: ['categories', path],
@@ -37,7 +37,7 @@ export default function TreeView({ path, size, displayWholePath = false }: TreeV
         <SubcategoriesContainer>
           <Loading isLoading={isLoading}>
             {subcategories.map((category) => (
-              <TreeView key={category.id} path={category.path} size={category.size} />
+              <TreeView key={category.id} path={category.path} size={category.size} isSearchResult={isSearchResult} searchedText={searchedText} />
             ))}
           </Loading>
         </SubcategoriesContainer>

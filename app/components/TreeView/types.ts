@@ -10,5 +10,7 @@ export interface TreeViewProps {
   path: string;
   size?: number;
   displayWholePath?: boolean;
+  isSearchResult?: boolean;
+  searchedText?: string;
 }
 
