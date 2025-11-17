@@ -1,3 +1,4 @@
+
 # ImageNet Categories Explorer
 
 Browse and search the ImageNet category hierarchy with an interactive tree view and debounced search.
@@ -13,6 +14,53 @@ I focused mainly on the Frontend as I apply for Frontend role. I wanted to get t
 - **SQLite Database**: SQLite is used for simplicity. FTS5 enables fast search.
 
 - **Lazy-Loaded Categories**: Categories are loaded on-demand to improve initial page load and reduce memory usage.
+
+## Prerequisites
+
+- Node.js 20+ (for local development)
+- Docker and Docker Compose (for containerized deployment)
+- npm
+
+## Getting Started
+
+### Local Development
+
+1. **Install dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+2. **Set up environment variables:**
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Set up the database:**
+
+   ```bash
+   # Generate Prisma Client
+   npm run db:generate
+
+   # Push schema to database (creates database if it doesn't exist)
+   npm run db:push
+
+   # Initialize FTS5 for full-text search
+   npm run db:init-fts5
+
+   # Import data from structure_released.xml
+   npm run import:xml
+   ```
+
+
+4. **Start the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Tasks
 
@@ -47,36 +95,6 @@ I focused mainly on the Frontend as I apply for Frontend role. I wanted to get t
 - **Search Highlighting**: Matching text is highlighted in search results
 
 🏃 **Run the production application**: `docker-compose up --build` and open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Prerequisites
-
-- Node.js 20+ (for local development)
-- Docker and Docker Compose (for containerized deployment)
-- npm
-
-## Getting Started
-
-### Local Development
-
-1. **Install dependencies:**
-
-   ```bash
-   npm install
-   ```
-
-2. **Set up environment variables:**
-
-   ```bash
-   cp .env.example .env
-   ```
-
-3. **Start the development server:**
-
-   ```bash
-   npm run dev
-   ```
-
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Docker Development
 
