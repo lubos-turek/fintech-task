@@ -2,17 +2,17 @@
 
 Browse and search the ImageNet category hierarchy with an interactive tree view and debounced search.
 
-Built with Next.js 16, React 19, TypeScript, Prisma, SQLite, Docker, and Tailwind CSS.
+Built with Next.js 16, React 19, TypeScript, React Query, Prisma, SQLite, Docker, and Tailwind CSS.
+
+I focused mainly on the Frontend as I apply for Frontend role. I wanted to get the important parts of the backend right (linear data transformation, fast search) but then I spent more time to polish the frotnend.
 
 ## Design Decisions
 
-- **Streamed Data Ingestion**: Data is streamed into the database to prevent memory and CPU exhaustion with large datasets.
+- **Streamed Data Ingestion**: Data is streamed using SAX into the database to prevent memory and CPU exhaustion with large datasets.
 
-- **SQLite Database**: SQLite provides simplicity, zero-configuration, and excellent read performance.
+- **SQLite Database**: SQLite is used for simplicity. FTS5 enables fast search.
 
 - **Lazy-Loaded Categories**: Categories are loaded on-demand to improve initial page load and reduce memory usage.
-
-- **FTS5 Full-Text Search**: FTS5 enables fast path search at the cost of added database complexity.
 
 ## Prerequisites
 
